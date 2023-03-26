@@ -73,7 +73,7 @@ class HBNBCommand(cmd.Cmd):
                 pline = pline[2].strip()  # pline is now str
                 if pline:
                     # check for *args or **kwargs
-                    if pline[0] is '{' and pline[-1] is'}'\
+                    if pline[0] is '{' and pline[-1] is '}'\
                             and type(eval(pline)) is dict:
                         _args = pline
                     else:
@@ -144,9 +144,11 @@ class HBNBCommand(cmd.Cmd):
                 if value[i] == "_":
                     value = value[:i] + " " + value[i+1:]
             # if there are quotes around a key or value, trim to remove
-            if (key[0] =="'" and key[-1] == "'") or (key[0] =="\"" and key[-1] == "\""):
+            if (key[0] == "'" and key[-1] == "'") or (
+                 key[0] == "\"" and key[-1] == "\""):
                 key = key[1:-1]
-            if (value[0] =="'" and value[-1] == "'") or (value[0] =="\"" and value[-1] == "\""):
+            if (value[0] == "'" and value[-1] == "'") or (
+                 value[0] == "\"" and value[-1] == "\""):
                 value = value[1:-1]
             # attribute is set to the that key in dictionary of objects
             setattr(new_instance, key, value)
@@ -215,7 +217,7 @@ class HBNBCommand(cmd.Cmd):
         key = c_name + "." + c_id
 
         try:
-            del(storage.all()[key])
+            del (storage.all()[key])
             storage.save()
         except KeyError:
             print("** no instance found **")
@@ -347,6 +349,7 @@ class HBNBCommand(cmd.Cmd):
         """ Help information for the update class """
         print("Updates an object with new information")
         print("Usage: update <className> <id> <attName> <attVal>\n")
+
 
 if __name__ == "__main__":
     HBNBCommand().cmdloop()
