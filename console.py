@@ -115,16 +115,44 @@ class HBNBCommand(cmd.Cmd):
 
     def do_create(self, args):
         """ Create an object of any class"""
-        if not args:
+        # splitting the argument on spaces
+        args = args.split()
+        # check if class name is missing or not in list of available classes
+        if args == []:
             print("** class name missing **")
             return
-        elif args not in HBNBCommand.classes:
+        if args[0] not in HBNBCommand.classes:
             print("** class doesn't exist **")
             return
+        # if class does not exist, create new instance
         new_instance = HBNBCommand.classes[args]()
-        storage.save()
+        # if more arguments, reset args without class name
+        if args[1]:
+            args = args[1:]
+        else:
+            # save before returning, in case using file storage
+            new_instance.save()
+            print(new_instance.id)
+            return
+        # iterate through each argument, splitting into key/value pairs
+        for argument in args:
+            splitter = argument.split("=")
+            key = splitter[0]
+            value = splitter[1]
+            # change underscore to space
+            for i in range(len(value)):
+                if value[i] == "_":
+                    value = value[:i] + " " + value[i+1:]
+            # if there are quotes around a key or value, trim to remove
+            if (key[0] =="'" and key[-1] == "'") or (key[0] =="\"" and key[-1] == "\""):
+                key = key[1:-1]
+            if (value[0] =="'" and value[-1] == "'") or (value[0] =="\"" and value[-1] == "\""):
+                value = value[1:-1]
+            # attribute is set to the that key in dictionary of objects
+            setattr(new_instance, key, value)
+        # new object is saved after setting non-nullable attributes
+        new_instance.save()
         print(new_instance.id)
-        storage.save()
 
     def help_create(self):
         """ Help information for the create method """
